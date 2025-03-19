@@ -8,8 +8,8 @@ const HomePage: React.FC = () => {
       <Hero />
       
       {/* Featured Products section - can be expanded later */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-blue-500">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900">Featured Products</h2>
             <p className="mt-4 text-lg text-gray-600">Discover our most popular items</p>

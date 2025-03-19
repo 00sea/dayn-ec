@@ -11,7 +11,11 @@ const NavLink: React.FC<NavLinkProps> = ({ to, children, className = '' }) => {
   return (
     <Link 
       to={to} 
-      className={`text-gray-700 hover:text-primary transition-colors duration-300 font-medium ${className}`}
+      className={`transition-colors duration-300 font-medium font-nav ${
+        className.includes('text-white') 
+          ? className 
+          : `text-gray-700 hover:text-primary ${className}`
+      }`}
     >
       {children}
     </Link>

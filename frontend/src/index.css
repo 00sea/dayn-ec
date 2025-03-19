@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
+@import url('https://db.onlinewebfonts.com/c/8deebd62b68f3e612b67daa38ac25e62?family=Fancy+Cut+Pro');
 @import "tailwindcss";
+
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -15,19 +18,39 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.font-nav {
+  font-family: 'Roboto Condensed', sans-serif;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.font-nav:hover {
+  color: #ffd978;
+  font-weight: 1000;
+}
+
+.font-watch {
+  font-family: 'Fancy Cut Pro', serif;
+}
+
+@font-face {
+  font-family: Coronet;
+  src: url("/fonts/Coronet.ttf");
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: white;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: #ffd978;
 }
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -56,10 +79,10 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: black;
   }
   a:hover {
     color: #747bff;
@@ -67,4 +90,9 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+@theme {
+  --font-coronet: Coronet, "serif";
+  --color-cartier: #ffd978;
 }

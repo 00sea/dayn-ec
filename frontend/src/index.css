@@ -27,7 +27,7 @@
 }
 
 .font-nav:hover {
-  color: #ffd978;
+  color: #5559a0;
   font-weight: 1000;
 }
 
@@ -46,7 +46,7 @@ a {
   text-decoration: inherit;
 }
 a:hover {
-  color: #ffd978;
+  color: #5559a0;
 }
 
 body {
@@ -94,5 +94,5 @@ button:focus-visible {
 
 @theme {
   --font-coronet: Coronet, "serif";
-  --color-cartier: #ffd978;
+  --color-cartier: #5559a0;
 }

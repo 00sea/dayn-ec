@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import NavLink from '../Header/NavLink';
+import ClockHands from './ClockHands';
+
 
 const Hero: React.FC = () => {
   return (
@@ -24,24 +24,28 @@ const Hero: React.FC = () => {
 
         <div className="mx-auto flex flex-col justify-between h-full w-full">
           {/* Text and watch */}
-          <div className="flex-grow flex items-center justify-between relative z-20 mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-7xl md:w-4/5 lg:w-3/4 xl:w-2/3">
+          <div className="flex-grow flex items-center justify-between relative z-20 mx-auto w-full max-w-7xl md:w-4/5 lg:w-3/4 xl:w-2/3">
           {/* Hero content */}
-              <div className="space-y-8 animate-fade-in">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-watch font-bold tracking-tight text-white">
-                  <span className="block text-white/40">I: DAY AIN'T OVER</span>
-                  <span className="block text-white">III: SIGN UP</span>
-                  <span className="block text-white/40">V: STORE</span>
+              <div className="space-y-5 animate-fade-in">
+                <h1 className="space-y-7 md:text-5xl lg:text-6xl font-watch font-bold tracking-tight text-white">
+                  <span className="block text-6xl text-white/0" style={{ WebkitTextStroke: '0.2px white' }}>I: DAY AIN'T OVER</span>
+                  <span className="block text-6xl text-white/0" style={{ WebkitTextStroke: '0.2px white' }}>II: WELCOME</span>
+                  <span className="block text-6xl text-white">III: SIGN UP</span>
+                  <span className="block text-6xl text-white/0" style={{ WebkitTextStroke: '0.2px white' }}>IIII: PREVIOUS</span>
+                  <span className="block text-6xl text-white/0" style={{ WebkitTextStroke: '0.2px white' }}>V: STORE</span>
                 </h1>
               </div>
 
-              {/* Hero product showcase */}
+              {/* Clock Face with Hands */}
               <div className="relative z-10 animate-slide-up hidden lg:block mx-auto">
-                <div>
+                <div className="relative">
                   <img
                     src="/watch.png"
-                    alt="Fashion collection showcase"
-                    className=" max-h-[60vh] w-auto object-contain"
+                    alt="Clock"
+                    className="h-110 w-auto object-contain"
                   />
+                  {/* Clock hands overlay */}
+                  <ClockHands />
                 </div>
               </div>
           </div>

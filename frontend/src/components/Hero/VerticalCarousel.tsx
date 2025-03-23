@@ -20,12 +20,12 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
   const [startY, setStartY] = useState(0);
   const [scrollDistance, setScrollDistance] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
-  // No router for Vite + React
-
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
   // Track if we should prevent a click after dragging
   const draggedRecently = useRef(false);
   
-  // Handle wheel scrolling - now defined but will be added to window
+  // Handle wheel scrolling - attached to window
   const handleWheel = (e: WheelEvent) => {
     e.preventDefault();
     if (e.deltaY > 0) {
@@ -94,6 +94,41 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
     }
   };
 
+  // Calculate the transform value to ensure consistent positioning
+  const calculateTransform = () => {
+    if (!itemRefs.current[0]) return 0;
+    
+    // Get the height of the container
+    const containerHeight = carouselRef.current?.clientHeight || 0;
+    
+    // Calculate middle position of container
+    const containerMiddle = containerHeight / 2;
+    
+    // Calculate offsets for each item to center it in the container
+    const offsets = itemRefs.current.map(ref => {
+      if (!ref) return 0;
+      const itemHeight = ref.clientHeight;
+      return containerMiddle - (itemHeight / 2);
+    });
+    
+    // Calculate the position based on active index
+    let position = 0;
+    for (let i = 0; i < activeIndex; i++) {
+      const itemHeight = itemRefs.current[i]?.clientHeight || 0;
+      position -= itemHeight;
+    }
+    
+    // Add offset for the active item to center it
+    position += offsets[activeIndex] || 0;
+    
+    // Add drag offset if dragging
+    if (isDragging) {
+      position += scrollDistance / 2;
+    }
+    
+    return position;
+  };
+
   // Set up listeners for drag events and wheel scrolling on the entire document
   useEffect(() => {
     // Mouse/touch drag handling
@@ -126,7 +161,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
       document.removeEventListener('touchmove', handleGlobalMouseMove as unknown as EventListener);
       document.removeEventListener('touchend', handleGlobalMouseUp);
     };
-  }, [isDragging, items.length]); // Added items.length as dependency for handleWheel
+  }, [isDragging, items.length]);
 
   // Reset draggedRecently after a short timeout
   useEffect(() => {
@@ -136,54 +171,54 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
     return () => clearTimeout(timeout);
   }, [activeIndex]);
 
+  // Initialize refs array when items change
+  useEffect(() => {
+    itemRefs.current = itemRefs.current.slice(0, items.length);
+  }, [items]);
+
+  // Force a re-render when window is resized to recalculate positions
+  useEffect(() => {
+    const handleResize = () => {
+      // Just forcing a re-render
+      setScrollDistance(0);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div 
-      className="relative h-50 cursor-grab"
+      className="relative h-60 cursor-grab"
       ref={carouselRef}
-      // Wheel events now handled at window level
       onMouseDown={handleDragStart}
       onTouchStart={handleDragStart}
       style={{ touchAction: 'none' }} // Prevents default touch behaviors
     >
       <div 
-        className="w-140 transition-transform duration-500 ease-out"
+        className="w-140 transition-transform duration-800 ease-out"
         style={{ 
-          transform: `translateY(${-(activeIndex * 100) + (isDragging ? scrollDistance / 2 : 0)}px)`,
+          transform: `translateY(${calculateTransform()}px)`,
         }}
       >
-        {items.map((item, index) => {
-          
-          return (
-            <div 
-              key={item.id}
-              className={`
-                h-30 flex items-center justify-start space-y-7 font-watch font-bold
-                ${index === activeIndex ? 'opacity-100 text-white cursor-pointer' : 'opacity-100 text-white/0'} 
-              `}
-              style={{ 
-                // Apply stroke effect for inactive items
-                WebkitTextStroke: index === activeIndex ? 'initial' : '0.2px white',
-                transformOrigin: 'left center',
-              }}
-              onClick={() => handleItemClick(index, item.path)}
-            >
-              <span className="block text-6xl">{item.label}</span>
-            </div>
-          );
-        })}
-      </div>
-      
-      {/* Optional navigation indicators */}
-      {/* <div className="absolute right-0 top-1/2 transform -translate-y-1/2 space-y-2 mr-4">
-        {items.map((_, index) => (
-          <div
-            key={`indicator-${index}`}
-            className={`w-2 h-2 rounded-full cursor-pointer
-              ${index === activeIndex ? 'bg-white' : 'bg-white/30'}`}
-            onClick={() => setActiveIndex(index)}
-          />
+        {items.map((item, index) => (
+          <div 
+            key={item.id}
+            ref={el => itemRefs.current[index] = el}
+            className={`
+              py-6 flex items-center justify-start font-watch font-bold
+              ${index === activeIndex ? 'opacity-100 text-white cursor-pointer' : 'opacity-100 text-white/0'} 
+            `}
+            style={{ 
+              // Apply stroke effect for inactive items
+              WebkitTextStroke: index === activeIndex ? 'initial' : '0.2px white',
+            }}
+            onClick={() => handleItemClick(index, item.path)}
+          >
+            <span className="block text-6xl leading-normal">{item.label}</span>
+          </div>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 };

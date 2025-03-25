@@ -15,18 +15,26 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
   items, 
   initialIndex = 0 
 }) => {
+  // Core carousel state
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [isDragging, setIsDragging] = useState(false);
   const [startY, setStartY] = useState(0);
   const [scrollDistance, setScrollDistance] = useState(0);
+  
+  // New state for interactive behaviors
+  const [isCarouselActive, setIsCarouselActive] = useState(false);
+  const [isFocusedLinkHovered, setIsFocusedLinkHovered] = useState(false);
+  
+  // Refs
   const carouselRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  
-  // Track if we should prevent a click after dragging
   const draggedRecently = useRef(false);
   
-  // Handle wheel scrolling - attached to window
+  // Handle wheel scrolling - only when carousel is active
   const handleWheel = (e: WheelEvent) => {
+    // Only handle wheel events if the carousel is active
+    if (!isCarouselActive) return;
+    
     e.preventDefault();
     if (e.deltaY > 0) {
       // Scrolling down
@@ -37,8 +45,11 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
     }
   };
 
-  // Handle mouse/touch down for dragging
+  // Handle mouse/touch down for dragging - only when carousel is active
   const handleDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+    // Only allow dragging if the carousel is active
+    if (!isCarouselActive) return;
+    
     setIsDragging(true);
     const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
     setStartY(clientY);
@@ -85,13 +96,18 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
       return;
     }
     
+    // Only process clicks when carousel is active
+    if (!isCarouselActive) return;
+    
+    // Only allow clicks on focused item or adjacent items
     if (index === activeIndex) {
-      // Only navigate if clicking the active item
+      // Navigate if clicking the active item
       window.location.href = path;
-    } else {
-      // Otherwise, make this item active
+    } else if (isAdjacent(index)) {
+      // Make adjacent item active
       setActiveIndex(index);
     }
+    // Ignore clicks on non-adjacent items
   };
 
   // Calculate the transform value to ensure consistent positioning
@@ -128,8 +144,55 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
     
     return position;
   };
+  
+  // Determine if an item is adjacent to the active item
+  const isAdjacent = (index: number) => {
+    return index === activeIndex - 1 || index === activeIndex + 1;
+  };
+  
+  // Determine item visibility class based on its state
+  const getItemVisibilityClass = (index: number) => {
+    if (index === activeIndex) {
+      // Always visible
+      return 'opacity-100';
+    } else if (isAdjacent(index) && isCarouselActive) {
+      // Adjacent items are visible when carousel is active
+      return 'opacity-100 transition-opacity duration-300';
+    } else {
+      // Non-adjacent items or when carousel is inactive
+      return 'opacity-0 transition-opacity duration-300';
+    }
+  };
+  
+  // Calculate slide offset for each item (in pixels for more precise control)
+  const getItemSlideOffset = (index: number) => {
+    if (index === activeIndex) {
+      // Focused item doesn't slide
+      return 0;
+    } else if (index === activeIndex - 1) {
+      // Item above focused (slides down when active)
+      return isCarouselActive ? 20 : -100;  // 30px slide distance
+    } else if (index === activeIndex + 1) {
+      // Item below focused (slides up when active)
+      return isCarouselActive ? -20 : 100;  // 30px slide distance
+    } else {
+      // Non-adjacent items slide further away
+      return index < activeIndex ? -60 : 60;
+    }
+  };
+  
+  // Determine text color for the focused item when hovered
+  const getFocusedItemColor = (index: number) => {
+    if (index === activeIndex && isFocusedLinkHovered) {
+      return 'text-white'; // Purple color when focused item is hovered
+    } else if (index === activeIndex) {
+      return 'text-white'; // White for focused item (not hovered)
+    } else {
+      return 'text-white/0'; // Transparent text with stroke for non-focused items
+    }
+  };
 
-  // Set up listeners for drag events and wheel scrolling on the entire document
+  // Set up listeners for drag events and wheel scrolling
   useEffect(() => {
     // Mouse/touch drag handling
     const handleGlobalMouseMove = (e: MouseEvent) => {
@@ -145,7 +208,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
       }
     };
     
-    // Add the wheel event listener to the window to capture scroll events anywhere
+    // Add the wheel event listener to the window
     window.addEventListener('wheel', handleWheel, { passive: false });
     
     document.addEventListener('mousemove', handleGlobalMouseMove);
@@ -154,14 +217,13 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
     document.addEventListener('touchend', handleGlobalMouseUp);
 
     return () => {
-      // Clean up all event listeners when component unmounts
       window.removeEventListener('wheel', handleWheel);
       document.removeEventListener('mousemove', handleGlobalMouseMove);
       document.removeEventListener('mouseup', handleGlobalMouseUp);
       document.removeEventListener('touchmove', handleGlobalMouseMove as unknown as EventListener);
       document.removeEventListener('touchend', handleGlobalMouseUp);
     };
-  }, [isDragging, items.length]);
+  }, [isDragging, items.length, isCarouselActive]); // Added isCarouselActive dependency
 
   // Reset draggedRecently after a short timeout
   useEffect(() => {
@@ -189,14 +251,16 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
 
   return (
     <div 
-      className="relative h-60 cursor-grab"
+      className="relative h-60"
       ref={carouselRef}
+      onMouseEnter={() => setIsCarouselActive(true)}
+      onMouseLeave={() => setIsCarouselActive(false)}
       onMouseDown={handleDragStart}
       onTouchStart={handleDragStart}
       style={{ touchAction: 'none' }} // Prevents default touch behaviors
     >
       <div 
-        className="w-140 transition-transform duration-800 ease-out"
+        className="w-140 transition-transform duration-500 ease-out"
         style={{ 
           transform: `translateY(${calculateTransform()}px)`,
         }}
@@ -207,15 +271,26 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
             ref={el => itemRefs.current[index] = el}
             className={`
               py-6 flex items-center justify-start font-watch font-bold
-              ${index === activeIndex ? 'opacity-100 text-white cursor-pointer' : 'opacity-100 text-white/0'} 
+              transition-opacity duration-300 ease-out
+              ${getItemVisibilityClass(index)}
+              ${index === activeIndex || (isAdjacent(index) && isCarouselActive) ? 'cursor-pointer' : 'cursor-default'}
             `}
             style={{ 
               // Apply stroke effect for inactive items
               WebkitTextStroke: index === activeIndex ? 'initial' : '0.2px white',
+              // Apply slide offset with transition
+              transform: `translateY(${getItemSlideOffset(index)}px)`,
+              transition: 'transform 300ms ease-out, opacity 300ms ease-out',
             }}
             onClick={() => handleItemClick(index, item.path)}
+            onMouseEnter={() => index === activeIndex && setIsFocusedLinkHovered(true)}
+            onMouseLeave={() => index === activeIndex && setIsFocusedLinkHovered(false)}
           >
-            <span className="block text-6xl leading-normal">{item.label}</span>
+            <span 
+              className={`block text-6xl leading-normal transition-colors duration-300 ${getFocusedItemColor(index)}`}
+            >
+              {item.label}
+            </span>
           </div>
         ))}
       </div>

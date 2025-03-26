@@ -46,7 +46,7 @@ const Header: React.FC = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
-              <NavLink to="/products" className={isScrolled ? '' : 'text-white hover:text-white/80'}>Store</NavLink>
+              <NavLink to="/store" className={isScrolled ? '' : 'text-white hover:text-white/80'}>Store</NavLink>
               <NavLink to="/about" className={isScrolled ? '' : 'text-white hover:text-white/80'}>ABOUT</NavLink>
               <NavLink to="/faq" className={isScrolled ? '' : 'text-white hover:text-white/80'}>Faq</NavLink>
             </nav>

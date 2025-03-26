@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
+    'products',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +57,14 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite's default development port
 ]
 
+# For production, specify your React app's domain
+# CORS_ALLOWED_ORIGINS = [
+#     "https://yourdomain.com",
+# ]
+
+# In development, allow all origins
+CORS_ALLOW_ALL_ORIGINS = True
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -66,7 +75,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-ROOT_URLCONF = 'daynova_backend.urls'
+ROOT_URLCONF = 'daynovadev.urls'
 
 TEMPLATES = [
     {
@@ -84,7 +93,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'daynova_backend.wsgi.application'
+WSGI_APPLICATION = 'daynovadev.wsgi.application'
 
 
 # Database

@@ -171,10 +171,10 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
       return 0;
     } else if (index === activeIndex - 1) {
       // Item above focused (slides down when active)
-      return isCarouselActive ? 20 : -100;  // 30px slide distance
+      return isCarouselActive ? 10 : -150;  // 30px slide distance
     } else if (index === activeIndex + 1) {
       // Item below focused (slides up when active)
-      return isCarouselActive ? -20 : 100;  // 30px slide distance
+      return isCarouselActive ? -10 : 150;  // 30px slide distance
     } else {
       // Non-adjacent items slide further away
       return index < activeIndex ? -60 : 60;
@@ -280,14 +280,14 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
               WebkitTextStroke: index === activeIndex ? 'initial' : '0.2px white',
               // Apply slide offset with transition
               transform: `translateY(${getItemSlideOffset(index)}px)`,
-              transition: 'transform 300ms ease-out, opacity 300ms ease-out',
+              transition: 'transform 400ms cubic-bezier(0.15,1,1,1), opacity 300ms ease-out',
             }}
             onClick={() => handleItemClick(index, item.path)}
             onMouseEnter={() => index === activeIndex && setIsFocusedLinkHovered(true)}
             onMouseLeave={() => index === activeIndex && setIsFocusedLinkHovered(false)}
           >
             <span 
-              className={`block text-6xl leading-normal transition-colors duration-300 ${getFocusedItemColor(index)}`}
+              className={`block text-6xl leading-normal transition-colors duration-0 ${getFocusedItemColor(index)}`}
             >
               {item.label}
             </span>

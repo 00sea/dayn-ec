@@ -1,6 +1,5 @@
 import React from 'react';
-import { Header } from '../components';
-import Hero from '../components/Hero/Hero';
+import { Header, Hero } from '../components';
 
 const HomePage: React.FC = () => {
   return (

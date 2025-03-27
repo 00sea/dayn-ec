@@ -31,7 +31,7 @@ class ProductImage(models.Model):
     # The ForeignKey creates the relationship between ProductImage and Product
     # on_delete=CASCADE means if the product is deleted, its images are also deleted
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image_url = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='products/', null=True, blank=True)
     alt_text = models.CharField(max_length=255, null=True, blank=True)
     display_order = models.IntegerField(default=0)
     is_primary = models.BooleanField(default=False)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from '../components';
+import { Header, Footer } from '../components';
 import StoreGrid from '../components/Store/StoreGrid';
 import { fetchProducts } from '../services/api';
 import type { Product } from '../components/Store/StoreGrid';
@@ -39,6 +39,7 @@ const StorePage: React.FC = () => {
           {error}
         </div>
       )}
+      <Footer />
     </div>
   );
 };

@@ -2,9 +2,18 @@ from rest_framework import serializers
 from .models import Product, ProductImage
 
 class ProductImageSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = ProductImage
-        fields = ['image_id', 'image_url', 'alt_text', 'is_primary']
+        fields = ['image_id', 'image_url', 'alt_text', 'is_primary', 'display_order']
+
+    def get_image_url(self, obj):
+        # This returns the complete URL to the image
+        request = self.context.get('request')
+        if obj.image and hasattr(obj.image, 'url'):
+            return request.build_absolute_uri(obj.image.url)
+        return None
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
@@ -30,7 +39,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'name': data['product_name'],
             'price': float(data['base_price']),
             'description': data['description'],
-            'image': data['images'][0]['image_url'] if data['images'] else '/placeholder.png',
+            'image': data['images'][0]['image_url'] if data['images'] else None,
             'category': 'watches',  # You might want to add this field to your model
             'images': data['images']
         }

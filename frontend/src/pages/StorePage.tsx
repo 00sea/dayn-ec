@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from '../components';
+import { Header, Footer } from '../components';
 import StoreGrid from '../components/Store/StoreGrid';
 import { fetchProducts } from '../services/api';
 import type { Product } from '../components/Store/StoreGrid';
@@ -33,13 +33,13 @@ const StorePage: React.FC = () => {
       <StoreGrid
         products={products}
         loading={loading}
-        title="Our Collection"
       />
       {error && (
         <div className="max-w-7xl mx-auto px-4 text-center text-red-500 py-4">
           {error}
         </div>
       )}
+      <Footer />
     </div>
   );
 };

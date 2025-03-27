@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "scripts": {
+    "dev": "vite",
+    "django": "cd ../path-to-django-project && python manage.py runserver",
+    "dev:all": "concurrently \"npm run dev\" \"npm run django\""
+  }
+}
+

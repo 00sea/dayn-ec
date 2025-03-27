@@ -33,7 +33,6 @@ const StorePage: React.FC = () => {
       <StoreGrid
         products={products}
         loading={loading}
-        title="Our Collection"
       />
       {error && (
         <div className="max-w-7xl mx-auto px-4 text-center text-red-500 py-4">

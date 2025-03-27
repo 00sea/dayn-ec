@@ -27,7 +27,7 @@ interface StoreGridProps {
 
 const StoreGrid: React.FC<StoreGridProps> = ({ 
   products: initialProducts, 
-  title = "Store", 
+//   title = "Store", 
   fetchUrl = 'http://localhost:8000/api/products/',
   filters = {},
   loading: externalLoading,
@@ -164,7 +164,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {title && <h1 className="font-watch text-4xl mb-8">{title}</h1>}
+      {/* {title && <h1 className="font-watch text-4xl mb-8">{title}</h1>} */}
       
       {loading ? (
         // Loading State

@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-// Define the Product type for TypeScript
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-}
+import { Product } from '../../types';
 
 // Props interface for better reusability
 interface StoreGridProps {

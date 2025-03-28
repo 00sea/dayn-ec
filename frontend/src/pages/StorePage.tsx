@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Header, Footer } from '../components';
 import StoreGrid from '../components/Store/StoreGrid';
 import { fetchProducts } from '../services/api';
-import type { Product } from '../components/Store/StoreGrid';
+import type { Product } from '../types';
 
 const StorePage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);

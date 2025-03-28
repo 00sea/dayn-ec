@@ -6,11 +6,10 @@ import VerticalCarousel from './VerticalCarousel';
 const Hero: React.FC = () => {
   // Define the carousel navigation items
   const carouselItems = [
-    { id: 'welcome', label: "I: THE DAY AIN'T OVER", path: '/' },
-    { id: 'two', label: 'II: SIGN UP', path: '/two' },
-    { id: 'signup', label: 'III: REGISTER', path: '/signup' },
-    { id: 'four', label: 'IIII: FOUR', path: '/four' },
-    { id: 'store', label: 'V: STORE', path: '/store' }
+    { id: 'welcome', label: "THE DAY AIN'T OVER", path: '/' },
+    { id: 'two', label: 'STORE', path: '/store' },
+    { id: 'signup', label: 'REGISTER', path: '/signup' },
+    { id: 'four', label: 'ABOUT', path: '/four' },
   ];
 
   return (

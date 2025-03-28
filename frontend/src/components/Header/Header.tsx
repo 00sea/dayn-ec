@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavLink from './NavLink';
-import { HiOutlineShoppingBag, HiOutlineUser, HiOutlineGlobeAlt } from 'react-icons/hi2';
-import { HiOutlineSearch } from "react-icons/hi";
+import { HiOutlineShoppingBag, HiOutlineUser } from 'react-icons/hi2';
+// import { HiOutlineSearch } from "react-icons/hi";
+// import { PiInstagramLogoThin } from "react-icons/pi";
 
 
 const Header: React.FC = () => {
@@ -53,18 +54,23 @@ const Header: React.FC = () => {
           </div>
 
           {/* Right side icons (desktop) */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link to="/language" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
-              <HiOutlineGlobeAlt xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth={1.2} stroke="currentColor" className="size-6"/>
-            </Link>
-            <Link to="/search" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
+          <div className="hidden md:flex items-center space-x-5">
+            <NavLink to="/" className={isScrolled ? '' : 'text-white hover:text-white/80'}>CAD $</NavLink>
+            <NavLink to="/faq" className={`mr-7 ${isScrolled ? '' : 'text-white hover:text-white/80'}`}>EN</NavLink>
+            {/* <Link to="/profile" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              <PiInstagramLogoThin xmlns="http://www.w3.org/2000/svg" fill="white" strokeWidth={2} stroke="currentColor" className="size-6"/>
+            </Link> */}
+            {/* <Link to="/language" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              <HiOutlineGlobeAlt xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth={0.8} stroke="currentColor" className="size-6"/>
+            </Link> */}
+            {/* <Link to="/search" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
               <HiOutlineSearch xmlns="http://www.w3.org/2000/svg" fill="none"  strokeWidth={1.5} stroke="currentColor" className="size-6"/>
-            </Link>
-            <Link to="/account" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
-              <HiOutlineUser xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth={1.5} stroke="currentColor" className="size-6"/>
+            </Link> */}
+            <Link to="/profile" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              <HiOutlineUser xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth={1} stroke="currentColor" className="size-6"/>
             </Link>
             <Link to="/cart" className={`transition-colors duration-300 relative ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
-              <HiOutlineShoppingBag xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth={1.5} stroke="currentColor" className="size-6"/>
+              <HiOutlineShoppingBag xmlns="http://www.w3.org/2000/svg" fill="none" strokeWidth={0.9} stroke="currentColor" className="size-6"/>
               <span className="absolute -top-2 -right-2 bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
             </Link>
           </div>
@@ -113,7 +119,7 @@ const Header: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
               </Link>
-              <Link to="/account" className="text-gray-600 hover:text-primary">
+              <Link to="/profile" className="text-gray-600 hover:text-primary">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                 </svg>

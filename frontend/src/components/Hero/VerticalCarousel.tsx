@@ -270,7 +270,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
             key={item.id}
             ref={el => itemRefs.current[index] = el}
             className={`
-              py-6 flex items-center justify-start font-watch font-bold
+              py-6 flex items-center justify-start font-alphadigital
               transition-opacity duration-300 ease-out
               ${getItemVisibilityClass(index)}
               ${index === activeIndex || (isAdjacent(index) && isCarouselActive) ? 'cursor-pointer' : 'cursor-default'}

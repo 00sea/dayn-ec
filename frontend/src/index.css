@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
 @import url('https://db.onlinewebfonts.com/c/8deebd62b68f3e612b67daa38ac25e62?family=Fancy+Cut+Pro');
+@import url('https://fonts.googleapis.com/css2?family=Fahkwang:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet');
+
 @import "tailwindcss";
 
 
@@ -10,7 +12,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -28,7 +30,7 @@
 
 .font-nav:hover {
   color: white;
-  font-weight: 1000;
+  font-weight: 200;
 }
 
 .font-watch {
@@ -38,6 +40,12 @@
 @font-face {
   font-family: Coronet;
   src: url("/fonts/Coronet.ttf");
+}
+
+@font-face {
+  font-family: 'AlphaDigital';
+  src: url("/fonts/DrukWideBold.ttf");
+  font-weight: 100;
 }
 
 a {
@@ -94,5 +102,6 @@ button:focus-visible {
 
 @theme {
   --font-coronet: Coronet, "serif";
+  --font-alphadigital: AlphaDigital, "serif";
   --color-cartier: #5559a0;
 }

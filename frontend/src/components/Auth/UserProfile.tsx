@@ -44,7 +44,7 @@ const UserProfile: React.FC = () => {
       });
       
       if (response.ok) {
-        const data = await response.json();
+        // const data = await response.json();
         // Here we would ideally update the user context with this new data
         // But for simplicity, we'll just show a success message
         setSuccessMessage('Profile updated successfully');
@@ -176,10 +176,6 @@ const UserProfile: React.FC = () => {
               
               <div className="space-y-4 mb-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-gray-400 font-nav">Username</p>
-                    <p className="text-white">{user.username}</p>
-                  </div>
                   
                   <div>
                     <p className="text-gray-400 font-nav">Email</p>

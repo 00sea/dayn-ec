@@ -60,12 +60,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, loading }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-12 pt-23">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Product Images Section */}
         <div className="space-y-6">
           {/* Main Image */}
-          <div className="bg-gray-800 aspect-square overflow-hidden">
+          <div className="aspect-square overflow-hidden">
             <img 
               src={mainImageUrl} 
               alt={product.name} 
@@ -79,7 +79,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, loading }) => {
               {allImages.map((imgUrl, index) => (
                 <div 
                   key={index}
-                  className={`aspect-square bg-gray-800 cursor-pointer overflow-hidden ${
+                  className={`aspect-square cursor-pointer overflow-hidden ${
                     imgUrl === selectedImageUrl ? 'ring-2 ring-white' : ''
                   }`}
                   onClick={() => setSelectedImageUrl(imgUrl)}

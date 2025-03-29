@@ -155,7 +155,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-30 font-nav">
       {/* {title && <h1 className="font-watch text-4xl mb-8">{title}</h1>} */}
       
       {loading ? (
@@ -179,16 +179,16 @@ const StoreGrid: React.FC<StoreGridProps> = ({
           {products.map(product => (
             <div key={product.id} className="group">
               <Link to={`/product/${product.id}`} className="block">
-                <div className="relative overflow-hidden bg-gray-800 aspect-square">
+                <div className="relative overflow-hidden aspect-square">
                   <img 
                     src={product.image} 
                     alt={product.name}
                     className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <div className="mt-4">
-                  <h3 className="font-watch text-xl">{product.name}</h3>
-                  <p className="mt-1 font-nav">${product.price.toFixed(2)}</p>
+                <div className="mt-4 flex flex-col items-center">
+                  <h3 className="text-sm text-white">{product.name}</h3>
+                  <p className="mt-1 text-white">${product.price.toFixed(2)}</p>
                 </div>
               </Link>
               <button 

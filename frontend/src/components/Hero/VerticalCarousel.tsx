@@ -268,7 +268,7 @@ const VerticalCarousel: React.FC<VerticalCarouselProps> = ({
         {items.map((item, index) => (
           <div 
             key={item.id}
-            ref={el => itemRefs.current[index] = el}
+            ref={(el: HTMLDivElement | null) => { itemRefs.current[index] = el; }}
             className={`
               py-6 flex items-center justify-start font-alphadigital
               transition-opacity duration-300 ease-out

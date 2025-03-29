@@ -6,7 +6,7 @@
 
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto Condensed', Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -29,8 +29,7 @@
 }
 
 .font-nav:hover {
-  color: white;
-  font-weight: 200;
+  color: rgb(226, 226, 226);
 }
 
 .font-watch {
@@ -49,12 +48,13 @@
 }
 
 a {
-  font-weight: 500;
   color: white;
   text-decoration: inherit;
+  transition: color 0.3s ease;
 }
 a:hover {
-  color: #5559a0;
+  /* color: #5559a0; */
+  color: rgb(216,216,216);
 }
 
 body {

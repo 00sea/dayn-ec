@@ -1,4 +1,4 @@
-# models.py
+# models.py for products
 from django.db import models
 
 
@@ -25,20 +25,40 @@ class Product(models.Model):
 class ProductImage(models.Model):
     """
     Represents an image associated with a product.
-    Maps to the 'ProductImages' table in your original schema.
     """
+    IMAGE_TYPE_CHOICES = [
+        ('primary', 'Primary (Front)'),
+        ('secondary', 'Secondary (Back)'),
+        ('additional', 'Additional'),
+    ]
+    
     image_id = models.AutoField(primary_key=True)
-    # The ForeignKey creates the relationship between ProductImage and Product
-    # on_delete=CASCADE means if the product is deleted, its images are also deleted
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='products/', null=True, blank=True)
     alt_text = models.CharField(max_length=255, null=True, blank=True)
     display_order = models.IntegerField(default=0)
-    is_primary = models.BooleanField(default=False)
-
+    image_type = models.CharField(
+        max_length=20, 
+        choices=IMAGE_TYPE_CHOICES, 
+        default='additional'
+    )
+    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['product', 'image_type'],
+                condition=models.Q(image_type__in=['primary', 'secondary']),
+                name='unique_image_type_per_product'
+            )
+        ]
+    
     def __str__(self):
-        """Return a string representation of the product image."""
-        return f"Image for {self.product.product_name}"
+        return f"{self.image_type.capitalize()} image for {self.product.product_name}"
+    
+    def save(self, *args, **kwargs):
+        # If this is marked as primary and no primary image exists, save as usual
+        # If a primary image already exists, that's handled by the unique constraint
+        super().save(*args, **kwargs)
 
 
 class ProductSize(models.Model):

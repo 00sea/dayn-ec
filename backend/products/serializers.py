@@ -6,7 +6,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductImage
-        fields = ['image_id', 'image_url', 'alt_text', 'is_primary', 'display_order']
+        fields = ['image_id', 'image_url', 'alt_text', 'image_type', 'display_order']
 
     def get_image_url(self, obj):
         # This returns the complete URL to the image
@@ -17,6 +17,8 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
+    primary_image = serializers.SerializerMethodField()
+    secondary_image = serializers.SerializerMethodField()
     
     class Meta:
         model = Product
@@ -26,9 +28,23 @@ class ProductSerializer(serializers.ModelSerializer):
             'description', 
             'base_price', 
             'images',
+            'primary_image',
+            'secondary_image',
             'is_active',
             'date_created'
         ]
+    
+    def get_primary_image(self, obj):
+        primary = obj.images.filter(image_type='primary').first()
+        if primary:
+            return ProductImageSerializer(primary, context=self.context).data.get('image_url')
+        return None
+    
+    def get_secondary_image(self, obj):
+        secondary = obj.images.filter(image_type='secondary').first()
+        if secondary:
+            return ProductImageSerializer(secondary, context=self.context).data.get('image_url')
+        return None
         
     def to_representation(self, instance):
         """Customize the output to match what the React app expects."""
@@ -39,7 +55,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'name': data['product_name'],
             'price': float(data['base_price']),
             'description': data['description'],
-            'image': data['images'][0]['image_url'] if data['images'] else None,
+            'image': data['primary_image'] or (data['images'][0]['image_url'] if data['images'] else None),
+            'secondaryImage': data['secondary_image'],
             'category': 'watches',  # You might want to add this field to your model
             'images': data['images']
         }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Product } from '../../types';
+import { Product } from '../../types';
 
 interface ProductDetailProps {
   product: Product | null;
@@ -32,10 +32,28 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, loading }) => {
   // Display the main image or the first image in the product's images array
   const mainImageUrl = selectedImageUrl || product.image;
   
-  // Extract all images from the product data
-  const allImages = product.images && Array.isArray(product.images) 
-    ? product.images.map(img => img.image_url) 
-    : [];
+  // Extract all images from the product data, ensuring we include primary and secondary
+  // images at the beginning of the array
+  const allImages: string[] = [];
+  
+  // Add primary image first
+  if (product.image) {
+    allImages.push(product.image);
+  }
+  
+  // Add secondary image next if it exists and isn't already included
+  if (product.secondaryImage && product.secondaryImage !== product.image) {
+    allImages.push(product.secondaryImage);
+  }
+  
+  // Add any additional images from the images array
+  if (product.images && Array.isArray(product.images)) {
+    product.images.forEach(img => {
+      if (img.image_url && !allImages.includes(img.image_url)) {
+        allImages.push(img.image_url);
+      }
+    });
+  }
 
   // Handle quantity changes
   const decreaseQuantity = () => {
@@ -79,8 +97,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, loading }) => {
               {allImages.map((imgUrl, index) => (
                 <div 
                   key={index}
-                  className={`aspect-square cursor-pointer overflow-hidden ${
-                    imgUrl === selectedImageUrl ? 'ring-2 ring-white' : ''
+                  className={`p-2 bg-white/4 aspect-square cursor-pointer overflow-hidden ${
+                    imgUrl === selectedImageUrl ? 'ring-1 ring-white' : ''
                   }`}
                   onClick={() => setSelectedImageUrl(imgUrl)}
                 >
@@ -102,7 +120,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, loading }) => {
             <h1 className="font-watch text-4xl">{product.name}</h1>
             <p className="font-nav text-2xl">${product.price.toFixed(2)}</p>
             
-            <div className="h-px bg-gray-700 my-6"></div>
+            <div className="h-px bg-red-700 my-6"></div>
             
             <div className="font-nav">
               <p className="text-gray-300 mb-4">{product.description}</p>

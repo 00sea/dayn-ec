@@ -13,7 +13,7 @@ const Hero: React.FC = () => {
   ];
 
   return (
-    <div className="h-screen items-center relative overflow-hidden pt-20 flex">
+    <div className="h-screen items-center relative overflow-hidden pt-20 flex font-nav">
       {/* Video Background */}
       <div className="absolute inset-0 w-full h-full z-0">
         {/* Video element with overlay */}
@@ -54,12 +54,12 @@ const Hero: React.FC = () => {
             </div>
         </div>
         <div className="z-20 mt-auto h-8 mx-auto flex gap-x-3">
-          <p className="font-nav">
+          <p className="font-light">
             &copy; {new Date().getFullYear()} Daynova. All rights reserved.
           </p>
-          <NavLink to="/products" className='text-white hover:text-white/80'>Terms</NavLink>
-          <NavLink to="/products" className='text-white hover:text-white/80'>Privacy</NavLink>
-          <NavLink to="/products" className='text-white hover:text-white/80'>Cookies</NavLink>
+          <NavLink to="/products">Terms</NavLink>
+          <NavLink to="/products">Privacy</NavLink>
+          <NavLink to="/products">Cookies</NavLink>
         </div>
 
       </div>

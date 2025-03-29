@@ -31,7 +31,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black shadow-md' : 'bg-transparent'}`}>
+    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-transparent' : 'bg-transparent'}`}>
       <div className="mx-auto px-4 sm:px-1 lg:px-8">
 
         <div className="flex justify-between items-center h-20">
@@ -56,7 +56,7 @@ const Header: React.FC = () => {
           {/* Right side icons (desktop) */}
           <div className="hidden md:flex items-center space-x-5">
             <NavLink to="/" className={isScrolled ? '' : 'text-white hover:text-white/80'}>CAD $</NavLink>
-            <NavLink to="/faq" className={`mr-7 ${isScrolled ? '' : 'text-white hover:text-white/80'}`}>EN</NavLink>
+            <NavLink to="/faq" className={`mr-6 ${isScrolled ? '' : 'text-white hover:text-white/80'}`}>EN</NavLink>
             {/* <Link to="/profile" className={`transition-colors duration-300 ${isScrolled ? 'text-gray-600 hover:text-primary' : 'text-white hover:text-white/80'}`}>
               <PiInstagramLogoThin xmlns="http://www.w3.org/2000/svg" fill="white" strokeWidth={2} stroke="currentColor" className="size-6"/>
             </Link> */}

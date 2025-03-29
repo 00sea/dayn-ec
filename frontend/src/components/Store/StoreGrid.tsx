@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Product } from '../../types';
-
-// Props interface for better reusability
-interface StoreGridProps {
-  products?: Product[];
-  title?: string;
-  fetchUrl?: string;
-  filters?: {
-    category?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    search?: string;
-  };
-  loading?: boolean;
-  onAddToCart?: (product: Product) => void;
-}
+import { Product, StoreGridProps } from '../../types';
 
 const StoreGrid: React.FC<StoreGridProps> = ({ 
   products: initialProducts, 
-//   title = "Store", 
   fetchUrl = 'http://localhost:8000/api/products/',
   filters = {},
   loading: externalLoading,
@@ -29,6 +13,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({
   const [products, setProducts] = useState<Product[]>(initialProducts || []);
   const [loading, setLoading] = useState<boolean>(externalLoading !== undefined ? externalLoading : !initialProducts);
   const [error, setError] = useState<string | null>(null);
+  const [hoveredProductId, setHoveredProductId] = useState<number | null>(null);
 
   // Fetch products only if not provided externally
   useEffect(() => {
@@ -70,6 +55,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({
             name: "Classic Timepiece",
             price: 249.99,
             image: "/product1.png",
+            secondaryImage: "/product1-back.png",
             category: "watches"
           },
           {
@@ -84,29 +70,10 @@ const StoreGrid: React.FC<StoreGridProps> = ({
             name: "Minimalist Watch",
             price: 199.99,
             image: "/product3.png",
+            secondaryImage: "/product3-back.png",
             category: "watches"
           },
-          {
-            id: 4,
-            name: "Leather Watch Band",
-            price: 49.99,
-            image: "/band1.png",
-            category: "accessories"
-          },
-          {
-            id: 5,
-            name: "Metal Watch Band",
-            price: 59.99,
-            image: "/band2.png",
-            category: "accessories"
-          },
-          {
-            id: 6,
-            name: "Watch Care Kit",
-            price: 29.99,
-            image: "/care-kit.png",
-            category: "accessories"
-          },
+          // other mock products...
         ];
         
         // Apply filters to mock data too
@@ -145,7 +112,10 @@ const StoreGrid: React.FC<StoreGridProps> = ({
   }, [externalLoading]);
 
   // Handle add to cart
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (e: React.MouseEvent, product: Product) => {
+    e.preventDefault();  // Prevent navigating to product detail
+    e.stopPropagation(); // Prevent event bubbling
+    
     if (onAddToCart) {
       onAddToCart(product);
     } else {
@@ -155,9 +125,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-30 font-nav">
-      {/* {title && <h1 className="font-watch text-4xl mb-8">{title}</h1>} */}
-      
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-25">      
       {loading ? (
         // Loading State
         <div className="flex justify-center items-center h-64">
@@ -177,26 +145,50 @@ const StoreGrid: React.FC<StoreGridProps> = ({
         // Products Grid
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {products.map(product => (
-            <div key={product.id} className="group">
+            <div 
+              key={product.id} 
+              className="group relative"
+              onMouseEnter={() => setHoveredProductId(product.id)}
+              onMouseLeave={() => setHoveredProductId(null)}
+            >
+              {/* Add to Cart Icon */}
+              <button 
+                className="absolute top-0 right-5 z-10 text-white p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={(e) => handleAddToCart(e, product)}
+                aria-label="Add to cart"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                </svg>
+              </button>
+
               <Link to={`/product/${product.id}`} className="block">
                 <div className="relative overflow-hidden aspect-square">
+                  {/* Main Image (Primary) */}
                   <img 
                     src={product.image} 
                     alt={product.name}
-                    className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                    className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
+                      hoveredProductId === product.id && product.secondaryImage ? 'opacity-0' : 'opacity-100'
+                    }`}
                   />
+                  
+                  {/* Secondary Image (shown on hover) */}
+                  {product.secondaryImage && (
+                    <img 
+                      src={product.secondaryImage} 
+                      alt={`${product.name} - Back view`}
+                      className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ${
+                        hoveredProductId === product.id ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
+                  )}
                 </div>
-                <div className="mt-4 flex flex-col items-center">
+                <div className="mt-4 font-nav flex flex-col items-center">
                   <h3 className="text-sm text-white">{product.name}</h3>
                   <p className="mt-1 text-white">${product.price.toFixed(2)}</p>
                 </div>
               </Link>
-              <button 
-                className="mt-2 w-full bg-transparent hover:bg-white hover:text-black border border-white py-2 font-nav transition-colors duration-200"
-                onClick={() => handleAddToCart(product)}
-              >
-                Add to Cart
-              </button>
             </div>
           ))}
         </div>

@@ -48,54 +48,54 @@ const StoreGrid: React.FC<StoreGridProps> = ({
         setError("Failed to load products. Please try again later.");
         setLoading(false);
         
-        // For development purposes, let's add some mock data
-        const mockProducts: Product[] = [
-          {
-            id: 1,
-            name: "Classic Timepiece",
-            price: 249.99,
-            image: "/product1.png",
-            secondaryImage: "/product1-back.png",
-            category: "watches"
-          },
-          {
-            id: 2,
-            name: "Modern Chronograph",
-            price: 349.99,
-            image: "/product2.png",
-            category: "watches"
-          },
-          {
-            id: 3,
-            name: "Minimalist Watch",
-            price: 199.99,
-            image: "/product3.png",
-            secondaryImage: "/product3-back.png",
-            category: "watches"
-          },
-          // other mock products...
-        ];
+        // // For development purposes, let's add some mock data
+        // const mockProducts: Product[] = [
+        //   {
+        //     id: 1,
+        //     name: "Classic Timepiece",
+        //     price: 249.99,
+        //     image: "/product1.png",
+        //     secondaryImage: "/product1-back.png",
+        //     category: "watches"
+        //   },
+        //   {
+        //     id: 2,
+        //     name: "Modern Chronograph",
+        //     price: 349.99,
+        //     image: "/product2.png",
+        //     category: "watches"
+        //   },
+        //   {
+        //     id: 3,
+        //     name: "Minimalist Watch",
+        //     price: 199.99,
+        //     image: "/product3.png",
+        //     secondaryImage: "/product3-back.png",
+        //     category: "watches"
+        //   },
+        //   // other mock products...
+        // ];
         
         // Apply filters to mock data too
-        let filteredMockProducts = [...mockProducts];
-        if (filters.category) {
-          filteredMockProducts = filteredMockProducts.filter(p => p.category === filters.category);
-        }
-        if (filters.minPrice !== undefined) {
-          filteredMockProducts = filteredMockProducts.filter(p => p.price >= filters.minPrice!);
-        }
-        if (filters.maxPrice !== undefined) {
-          filteredMockProducts = filteredMockProducts.filter(p => p.price <= filters.maxPrice!);
-        }
-        if (filters.search) {
-          const searchLower = filters.search.toLowerCase();
-          filteredMockProducts = filteredMockProducts.filter(p => 
-            p.name.toLowerCase().includes(searchLower) || 
-            p.category.toLowerCase().includes(searchLower)
-          );
-        }
+        // let filteredMockProducts = [...mockProducts];
+        // if (filters.category) {
+        //   filteredMockProducts = filteredMockProducts.filter(p => p.category === filters.category);
+        // }
+        // if (filters.minPrice !== undefined) {
+        //   filteredMockProducts = filteredMockProducts.filter(p => p.price >= filters.minPrice!);
+        // }
+        // if (filters.maxPrice !== undefined) {
+        //   filteredMockProducts = filteredMockProducts.filter(p => p.price <= filters.maxPrice!);
+        // }
+        // if (filters.search) {
+        //   const searchLower = filters.search.toLowerCase();
+        //   filteredMockProducts = filteredMockProducts.filter(p => 
+        //     p.name.toLowerCase().includes(searchLower) || 
+        //     p.category.toLowerCase().includes(searchLower)
+        //   );
+        // }
         
-        setProducts(filteredMockProducts);
+        // setProducts(filteredMockProducts);
       }
     };
 
@@ -125,7 +125,7 @@ const StoreGrid: React.FC<StoreGridProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-25">      
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-35">      
       {loading ? (
         // Loading State
         <div className="flex justify-center items-center h-64">

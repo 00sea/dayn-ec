@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Product, ProductImage
+from .models import Product, ProductImage, ProductSize, ProductVariant
 
 class ProductImageSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
@@ -15,10 +15,23 @@ class ProductImageSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url)
         return None
 
+class ProductSizeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSize
+        fields = ['size_id', 'size_name', 'size_code', 'display_order']
+
+class ProductVariantSerializer(serializers.ModelSerializer):
+    size = ProductSizeSerializer(read_only=True)
+    
+    class Meta:
+        model = ProductVariant
+        fields = ['variant_id', 'size', 'price_adjustment', 'stock_quantity', 'is_active']
+
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     primary_image = serializers.SerializerMethodField()
     secondary_image = serializers.SerializerMethodField()
+    variants = ProductVariantSerializer(many=True, read_only=True)
     
     class Meta:
         model = Product
@@ -30,6 +43,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'images',
             'primary_image',
             'secondary_image',
+            'size_policy',
+            'stock_quantity',
+            'variants',
             'is_active',
             'date_created'
         ]
@@ -58,5 +74,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'image': data['primary_image'] or (data['images'][0]['image_url'] if data['images'] else None),
             'secondaryImage': data['secondary_image'],
             'category': 'watches',  # You might want to add this field to your model
-            'images': data['images']
+            'images': data['images'],
+            'sizePolicy': data['size_policy'],
+            'stockQuantity': data['stock_quantity'],
+            'variants': data['variants'],
+            'hasSizes': instance.has_sizes
         }

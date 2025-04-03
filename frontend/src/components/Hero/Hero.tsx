@@ -23,7 +23,7 @@ const Hero: React.FC = () => {
           muted 
           loop 
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-90"
         >
           {/* For a real implementation, you would replace this with your actual video file */}
           <source src="/video0.webm" type="video/webm" />

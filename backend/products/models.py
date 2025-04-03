@@ -5,10 +5,13 @@ from django.db import models
 class Product(models.Model):
     """
     Represents a product in the store.
-    Maps to the 'Products' table in your original schema.
     """
-    # In Django, if you don't specify a primary key, it automatically creates
-    # an 'id' AutoField. We'll keep your original field name for clarity.
+    # Size options
+    SIZE_POLICY_CHOICES = [
+        ('single', 'No Sizes (Single Product)'),
+        ('multiple', 'Multiple Sizes Available'),
+    ]
+    
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
@@ -16,10 +19,33 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-
+    
+    # New field for size policy
+    size_policy = models.CharField(
+        max_length=10,
+        choices=SIZE_POLICY_CHOICES,
+        default='single',
+        help_text="Determine if this product comes in multiple sizes or is a single product."
+    )
+    
+    # Single stock field for products without size variants
+    stock_quantity = models.IntegerField(default=0, help_text="Stock quantity for single-size products.")
+    
     def __str__(self):
         """Return a string representation of the product."""
         return self.product_name
+    
+    @property
+    def has_sizes(self):
+        """Check if the product has multiple sizes."""
+        return self.size_policy == 'multiple'
+    
+    @property
+    def total_stock(self):
+        """Return total stock across all variants or single stock."""
+        if self.has_sizes:
+            return sum(variant.stock_quantity for variant in self.variants.all())
+        return self.stock_quantity
 
 
 class ProductImage(models.Model):
@@ -78,12 +104,11 @@ class ProductSize(models.Model):
 class ProductVariant(models.Model):
     """
     Represents a specific variant of a product (e.g., a product in a specific size).
-    Maps to the 'ProductVariants' table in your original schema.
     """
     variant_id = models.AutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
     size = models.ForeignKey(ProductSize, on_delete=models.CASCADE)
-    sku = models.CharField(max_length=50, unique=True)
+    # Removed the SKU field
     price_adjustment = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     stock_quantity = models.IntegerField(default=0)
     reorder_threshold = models.IntegerField(default=0)
